@@ -32,9 +32,9 @@ function App() {
     setSelectedCard({});
   };
 
-  function handleCardClick(card) {
+  const handleCardClick = (card) => {
     setSelectedCard(card);
-  }
+  };
 
   return (
     <>
