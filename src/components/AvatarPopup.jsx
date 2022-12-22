@@ -1,7 +1,7 @@
 import React from 'react';
 import PopupWithForm from './PopupWithForm';
 
-function AvatarPopup({ isOpen, onClose }) {
+const AvatarPopup = ({ isOpen, onClose }) => {
   return (
     <PopupWithForm
       name="avatar"
@@ -20,6 +20,6 @@ function AvatarPopup({ isOpen, onClose }) {
       <span className="popup__error avatar-link-error"></span>
     </PopupWithForm>
   );
-}
+};
 
 export default AvatarPopup;

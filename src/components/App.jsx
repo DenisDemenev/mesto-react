@@ -7,7 +7,7 @@ import AddCardPopup from './AddCardPopup';
 import AvatarPopup from './AvatarPopup';
 import ImagePopup from './ImagePopup';
 
-function App() {
+const App = () => {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
@@ -52,6 +52,6 @@ function App() {
       <ImagePopup card={selectedCard} onClose={closeAllPopups} />
     </>
   );
-}
+};
 
 export default App;
