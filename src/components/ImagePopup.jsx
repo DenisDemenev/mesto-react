@@ -4,7 +4,7 @@ const ImagePopup = ({ card, onClose }) => {
   return (
     <div
       className={`popup popup_dark popup_photo_big ${
-        card.link && 'popup_open'
+        card.link ? 'popup_open' : ''
       }`}>
       <div className="popup__big-photo-container">
         <button
