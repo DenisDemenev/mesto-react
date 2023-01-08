@@ -1,41 +1,36 @@
-import React, { useEffect, useState } from 'react';
+import { useContext } from 'react';
 import Card from './Card';
-import avatar from '../images/Avatar.png';
-import api from '../utils/Api';
+import { CurrentUserContext } from '../context/CurrentUserContext';
 
-const Main = ({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) => {
-  const [userName, setUserName] = useState('Жак-Ив Кусто');
-  const [userDescription, setUserDescription] = useState('Иследователь океана');
-  const [userAvatar, setUserAvatar] = useState(avatar);
-  const [cards, setCards] = useState([]);
-
-  useEffect(() => {
-    Promise.all([api.getUserInfo(), api.getInitialCards()])
-      .then(([user, cards]) => {
-        setUserName(user.name);
-        setUserDescription(user.about);
-        setUserAvatar(user.avatar);
-        setCards(cards);
-      })
-      .catch((err) => {
-        console.log(`Что-то пошло не так: ${err}`);
-      });
-  }, []);
+const Main = ({
+  onEditProfile,
+  onAddPlace,
+  onEditAvatar,
+  onCardClick,
+  cards,
+  onCardLike,
+  onCardDelete,
+}) => {
+  const currentUser = useContext(CurrentUserContext);
 
   return (
     <main className="content">
       <section className="profile">
-        <img src={userAvatar} alt="Аватар" className="profile__avatar" />
+        <img
+          src={currentUser.avatar}
+          alt="Аватар"
+          className="profile__avatar"
+        />
         <button
           className="profile__avatar-edit"
           onClick={onEditAvatar}></button>
         <div className="profile__info">
-          <h1 className="profile__name">{userName}</h1>
+          <h1 className="profile__name">{currentUser.name}</h1>
           <button
             className="profile__button-edit"
             type="button"
             onClick={onEditProfile}></button>
-          <p className="profile__title">{userDescription}</p>
+          <p className="profile__title">{currentUser.about}</p>
         </div>
         <button
           className="profile__button-add"
@@ -46,7 +41,13 @@ const Main = ({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) => {
       <section className="photo">
         <ul className="photo__cards">
           {cards.map((card) => (
-            <Card key={card._id} card={card} onCardClick={onCardClick} />
+            <Card
+              key={card._id}
+              card={card}
+              onCardClick={onCardClick}
+              onCardLike={onCardLike}
+              onCardDelete={onCardDelete}
+            />
           ))}
         </ul>
       </section>

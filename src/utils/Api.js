@@ -24,10 +24,7 @@ class Api {
     const res = await fetch(`${this._url}users/me`, {
       method: 'PATCH',
       headers: this._headers,
-      body: JSON.stringify({
-        name: newUser.name,
-        about: newUser.title,
-      }),
+      body: JSON.stringify(newUser),
     });
     return this._checkResponse(res);
   }
@@ -61,17 +58,9 @@ class Api {
     return this._checkResponse(res);
   }
 
-  async deleteLike(id) {
+  async changeLikeCardStatus(id, isLiked) {
     const res = await fetch(`${this._url}cards/${id}/likes`, {
-      method: 'DELETE',
-      headers: this._headers,
-    });
-    return this._checkResponse(res);
-  }
-
-  async addLike(id) {
-    const res = await fetch(`${this._url}cards/${id}/likes`, {
-      method: 'PUT',
+      method: isLiked ? 'PUT' : 'DELETE',
       headers: this._headers,
     });
     return this._checkResponse(res);
