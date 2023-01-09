@@ -8,6 +8,7 @@ const PopupWithForm = ({
   onClose,
   onSubmit,
   btnText,
+  isValid,
 }) => {
   return (
     <div className={`popup popup_${name} ${isOpen ? 'popup_open' : ''}`}>
@@ -25,7 +26,10 @@ const PopupWithForm = ({
           noValidate>
           {children}
           <button
-            className="popup__save-button"
+            className={`popup__save-button ${
+              !isValid ? 'popup__save-button_disabled' : ''
+            }`}
+            disabled={!isValid}
             type="submit"
             aria-label="Сохранить">
             {btnText}

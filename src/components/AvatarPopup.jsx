@@ -1,19 +1,27 @@
 import { useRef, useEffect } from 'react';
 import PopupWithForm from './PopupWithForm';
+import { useFormAndValidation } from '../hooks/useFormAndValidation';
 
 const AvatarPopup = ({ isOpen, onClose, onUpdateAvatar, isLoad }) => {
+  const { handleChange, errors, isValid, resetForm } = useFormAndValidation({
+    avatar: '',
+  });
   const avatarRef = useRef();
 
   function handleSubmit(e) {
     e.preventDefault();
-    onUpdateAvatar({
-      avatar: avatarRef.current.value,
-    });
+    if (isValid) {
+      onUpdateAvatar({
+        avatar: avatarRef.current.value,
+      });
+    }
   }
 
   useEffect(() => {
-    avatarRef.current.value = '';
-  }, [isOpen]);
+    if (!isOpen) {
+      resetForm();
+    }
+  }, [isOpen, resetForm]);
 
   return (
     <PopupWithForm
@@ -22,7 +30,8 @@ const AvatarPopup = ({ isOpen, onClose, onUpdateAvatar, isLoad }) => {
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
-      btnText={isLoad ? 'Сохраняем...' : 'Сохранить'}>
+      btnText={isLoad ? 'Сохраняем...' : 'Сохранить'}
+      isValid={isValid}>
       <input
         ref={avatarRef}
         type="url"
@@ -32,8 +41,14 @@ const AvatarPopup = ({ isOpen, onClose, onUpdateAvatar, isLoad }) => {
         placeholder="Ссылка изображения"
         className="popup__input popup__input_type_link"
         required
+        onChange={handleChange}
       />
-      <span className="popup__error avatar-link-error"></span>
+      <span
+        className={`popup__error avatar-link-error ${
+          isValid ? '' : 'popup__error_visible'
+        }`}>
+        {errors.avatar}
+      </span>
     </PopupWithForm>
   );
 };

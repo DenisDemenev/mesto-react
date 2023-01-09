@@ -1,30 +1,29 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import PopupWithForm from './PopupWithForm';
+import { useFormAndValidation } from '../hooks/useFormAndValidation';
 
 const AddCardPopup = ({ isOpen, onClose, onAddCard, isLoad }) => {
-  const [name, setName] = useState('');
-  const [link, setLink] = useState('');
-
-  function handleChangeName(e) {
-    setName(e.target.value);
-  }
-
-  function handleChangeLink(e) {
-    setLink(e.target.value);
-  }
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    onAddCard({
-      name,
-      link,
+  const { values, isValid, handleChange, errors, resetForm } =
+    useFormAndValidation({
+      name: '',
+      link: '',
     });
-  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (isValid) {
+      onAddCard({
+        name: values.name,
+        link: values.link,
+      });
+    }
+  };
 
   useEffect(() => {
-    setName('');
-    setLink('');
-  }, [isOpen]);
+    if (!isOpen) {
+      resetForm();
+    }
+  }, [isOpen, resetForm]);
 
   return (
     <PopupWithForm
@@ -33,31 +32,42 @@ const AddCardPopup = ({ isOpen, onClose, onAddCard, isLoad }) => {
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
-      btnText={isLoad ? 'Сохраняем...' : 'Сохранить'}>
+      btnText={isLoad ? 'Сохраняем...' : 'Сохранить'}
+      isValid={isValid}>
       <input
-        onChange={handleChangeName}
+        onChange={handleChange}
         type="text"
         name="name"
         id="place-name"
-        value={name}
+        value={values.name}
         placeholder="Название"
         className="popup__input popup__input_type_place"
         required
         minLength="1"
         maxLength="30"
       />
-      <span className="popup__error place-name-error"></span>
+      <span
+        className={`popup__error place-name-error ${
+          isValid ? '' : 'popup__error_visible'
+        }`}>
+        {errors.name}
+      </span>
       <input
-        onChange={handleChangeLink}
+        onChange={handleChange}
         type="url"
         name="link"
         id="place-link"
-        value={link}
+        value={values.link}
         placeholder="Ссылка изображения"
         className="popup__input popup__input_type_link"
         required
       />
-      <span className="popup__error place-link-error"></span>
+      <span
+        className={`popup__error place-link-error ${
+          isValid ? '' : 'popup__error_visible'
+        }`}>
+        {errors.link}
+      </span>
     </PopupWithForm>
   );
 };

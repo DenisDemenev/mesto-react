@@ -1,32 +1,34 @@
-import { useState, useEffect, useContext } from 'react';
+import { useEffect, useContext } from 'react';
 import { CurrentUserContext } from '../context/CurrentUserContext';
 import PopupWithForm from './PopupWithForm';
+import { useFormAndValidation } from '../hooks/useFormAndValidation';
 
 const ProfilePopup = ({ isOpen, onClose, onUpdateUser, isLoad }) => {
-  const [name, setName] = useState('');
-  const [title, setTitle] = useState('');
+  const { values, setValues, isValid, handleChange, errors, resetForm } =
+    useFormAndValidation({
+      name: '',
+      title: '',
+    });
   const currentUser = useContext(CurrentUserContext);
-
-  function handleChangeName(e) {
-    setName(e.target.value);
-  }
-
-  function handleChangeTitle(e) {
-    setTitle(e.target.value);
-  }
 
   function handleSubmit(e) {
     e.preventDefault();
-    onUpdateUser({
-      name,
-      about: title,
-    });
+    if (isValid) {
+      onUpdateUser({
+        name: values.name,
+        about: values.title,
+      });
+    }
   }
-
   useEffect(() => {
-    setName(currentUser.name);
-    setTitle(currentUser.about);
-  }, [currentUser, isOpen]);
+    setValues({
+      name: currentUser.name,
+      title: currentUser.about,
+    });
+    if (!isOpen) {
+      resetForm();
+    }
+  }, [currentUser, isOpen, resetForm, setValues]);
 
   return (
     <PopupWithForm
@@ -35,33 +37,44 @@ const ProfilePopup = ({ isOpen, onClose, onUpdateUser, isLoad }) => {
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
-      btnText={isLoad ? 'Сохраняем...' : 'Сохранить'}>
+      btnText={isLoad ? 'Сохраняем...' : 'Сохранить'}
+      isValid={isValid}>
       <input
         type="text"
         name="name"
         id="profile-name"
-        value={name || ''}
+        value={values.name || ''}
         placeholder="Имя"
         className="popup__input popup__input_type_name"
         required
         minLength="2"
         maxLength="40"
-        onChange={handleChangeName}
+        onChange={handleChange}
       />
-      <span className="popup__error profile-name-error"></span>
+      <span
+        className={`popup__error profile-name-error ${
+          isValid ? '' : 'popup__error_visible'
+        }`}>
+        {errors.name}
+      </span>
       <input
         type="text"
         name="title"
         id="profile-title"
-        value={title || ''}
+        value={values.title || ''}
         placeholder="Деятельность"
         className="popup__input popup__input_type_title"
         required
         minLength="2"
         maxLength="200"
-        onChange={handleChangeTitle}
+        onChange={handleChange}
       />
-      <span className="popup__error profile-title-error"></span>
+      <span
+        className={`popup__error profile-title-error ${
+          isValid ? '' : 'popup__error_visible'
+        }`}>
+        {errors.title}
+      </span>
     </PopupWithForm>
   );
 };
