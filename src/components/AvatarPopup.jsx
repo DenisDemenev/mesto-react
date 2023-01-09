@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react';
 import PopupWithForm from './PopupWithForm';
 
-const AvatarPopup = ({ isOpen, onClose, onUpdateAvatar }) => {
+const AvatarPopup = ({ isOpen, onClose, onUpdateAvatar, isLoad }) => {
   const avatarRef = useRef();
 
   function handleSubmit(e) {
@@ -21,7 +21,8 @@ const AvatarPopup = ({ isOpen, onClose, onUpdateAvatar }) => {
       title="Обновить аватар"
       isOpen={isOpen}
       onClose={onClose}
-      onSubmit={handleSubmit}>
+      onSubmit={handleSubmit}
+      btnText={isLoad ? 'Сохраняем...' : 'Сохранить'}>
       <input
         ref={avatarRef}
         type="url"

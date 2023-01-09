@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { CurrentUserContext } from '../context/CurrentUserContext';
 import PopupWithForm from './PopupWithForm';
 
-const ProfilePopup = ({ isOpen, onClose, onUpdateUser }) => {
+const ProfilePopup = ({ isOpen, onClose, onUpdateUser, isLoad }) => {
   const [name, setName] = useState('');
   const [title, setTitle] = useState('');
   const currentUser = useContext(CurrentUserContext);
@@ -34,12 +34,13 @@ const ProfilePopup = ({ isOpen, onClose, onUpdateUser }) => {
       title="Редактировать профиль"
       isOpen={isOpen}
       onClose={onClose}
-      onSubmit={handleSubmit}>
+      onSubmit={handleSubmit}
+      btnText={isLoad ? 'Сохраняем...' : 'Сохранить'}>
       <input
         type="text"
         name="name"
         id="profile-name"
-        defaultValue={name}
+        value={name}
         placeholder="Имя"
         className="popup__input popup__input_type_name"
         required
@@ -52,7 +53,7 @@ const ProfilePopup = ({ isOpen, onClose, onUpdateUser }) => {
         type="text"
         name="title"
         id="profile-title"
-        defaultValue={title}
+        value={title}
         placeholder="Деятельность"
         className="popup__input popup__input_type_title"
         required

@@ -16,6 +16,7 @@ const App = () => {
   const [selectedCard, setSelectedCard] = useState({});
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     Promise.all([api.getUserInfo(), api.getInitialCards()])
@@ -75,33 +76,45 @@ const App = () => {
   };
 
   const handleUpdateUser = (newUser) => {
+    setLoading(true);
     api
       .setUserInfo(newUser)
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
       })
-      .catch((err) => console.log(`Что-то пошло не так: ${err}`));
+      .catch((err) => console.log(`Что-то пошло не так: ${err}`))
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const handleUpdateAvatar = (avatar) => {
+    setLoading(true);
     api
       .setAvatar(avatar)
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
       })
-      .catch((err) => console.log(`Что-то пошло не так: ${err}`));
+      .catch((err) => console.log(`Что-то пошло не так: ${err}`))
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   function handleAddPlaceSubmit(data) {
+    setLoading(true);
     api
       .addCard(data)
       .then((res) => {
         setCards([res, ...cards]);
         closeAllPopups();
       })
-      .catch((err) => console.log(`Что-то пошло не так: ${err}`));
+      .catch((err) => console.log(`Что-то пошло не так: ${err}`))
+      .finally(() => {
+        setLoading(false);
+      });
   }
 
   return (
@@ -122,16 +135,19 @@ const App = () => {
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
           onUpdateUser={handleUpdateUser}
+          isLoad={isLoading}
         />
         <AddCardPopup
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
           onAddCard={handleAddPlaceSubmit}
+          isLoad={isLoading}
         />
         <AvatarPopup
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
           onUpdateAvatar={handleUpdateAvatar}
+          isLoad={isLoading}
         />
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
       </CurrentUserContext.Provider>

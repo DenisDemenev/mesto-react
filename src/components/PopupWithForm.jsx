@@ -7,6 +7,7 @@ const PopupWithForm = ({
   children,
   onClose,
   onSubmit,
+  btnText,
 }) => {
   return (
     <div className={`popup popup_${name} ${isOpen ? 'popup_open' : ''}`}>
@@ -27,7 +28,7 @@ const PopupWithForm = ({
             className="popup__save-button"
             type="submit"
             aria-label="Сохранить">
-            Сохранить
+            {btnText}
           </button>
         </form>
       </div>

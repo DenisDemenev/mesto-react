@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import PopupWithForm from './PopupWithForm';
 
-const AddCardPopup = ({ isOpen, onClose, onAddCard }) => {
+const AddCardPopup = ({ isOpen, onClose, onAddCard, isLoad }) => {
   const [name, setName] = useState('');
   const [link, setLink] = useState('');
 
@@ -32,13 +32,14 @@ const AddCardPopup = ({ isOpen, onClose, onAddCard }) => {
       title="Новое место"
       isOpen={isOpen}
       onClose={onClose}
-      onSubmit={handleSubmit}>
+      onSubmit={handleSubmit}
+      btnText={isLoad ? 'Сохраняем...' : 'Сохранить'}>
       <input
         onChange={handleChangeName}
         type="text"
         name="name"
         id="place-name"
-        defaultValue={name}
+        value={name}
         placeholder="Название"
         className="popup__input popup__input_type_place"
         required
@@ -51,7 +52,7 @@ const AddCardPopup = ({ isOpen, onClose, onAddCard }) => {
         type="url"
         name="link"
         id="place-link"
-        defaultValue={link}
+        value={link}
         placeholder="Ссылка изображения"
         className="popup__input popup__input_type_link"
         required
