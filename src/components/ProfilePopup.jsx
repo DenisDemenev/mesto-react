@@ -40,7 +40,7 @@ const ProfilePopup = ({ isOpen, onClose, onUpdateUser, isLoad }) => {
         type="text"
         name="name"
         id="profile-name"
-        value={name}
+        value={name || ''}
         placeholder="Имя"
         className="popup__input popup__input_type_name"
         required
@@ -53,7 +53,7 @@ const ProfilePopup = ({ isOpen, onClose, onUpdateUser, isLoad }) => {
         type="text"
         name="title"
         id="profile-title"
-        value={title}
+        value={title || ''}
         placeholder="Деятельность"
         className="popup__input popup__input_type_title"
         required
